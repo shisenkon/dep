@@ -8,7 +8,7 @@
  * @license          GNU General Public License version 2 or later;
  * Функции: Считает стоимость: фанера54, Евростандарт 60, Дуб.
  */
-// TODO считать Фанера36 на обшивку, Бук, Компримат 1п, Компримат 3п
+// TODO считать Фанера36 на обшивку, Компримат 1п, Компримат 3п
 // TODO сравнение цен из двух файлов CSV1
 class Stair
 {
@@ -185,6 +185,10 @@ class Stair
          $this->consumption['veneer'] += ($step_lenght + $step_width) * 54 * 2 * 2 * 0.000001 * $step_count;
          $this->consumption['pva_kleuberit'] += ($step_lenght * $step_width) * 3 * 0.5 * 0.000001 * $step_count;
       }
+      elseif($step_material == 'beech') {
+         $this->consumption['beech'] += ($step_lenght * $step_width) * 0.07 * 1.25 * 0.000001 * $step_count;
+         $this->consumption['pva_kleuberit'] += ($step_lenght * $step_width) * 3 * 0.5 * 0.000001 * $step_count;
+      }
       $this->consumption['mordant'] += (($step_lenght * $step_width) * 2 + (60 * 2 * ($step_lenght + $step_width))) * 0.000001 * 0.05 * $step_count;
       $this->consumption['varnish'] += (($step_lenght * $step_width) * 2 + (60 * 2 * ($step_lenght + $step_width))) * 0.000001 * 0.5 * $step_count;
    }
@@ -222,10 +226,18 @@ class Stair
    
    protected function count_risers_sormats()
    {
-      $temp_material = $this->stair_material;
-      $this->price_base_step($this->step_base_lenght, 140, $this->step_base_quantity, $this->stair_material, 'fan54');
-      $this->price_base_step($this->step_base_lenght, 140, $this->step_frieze_quantity * 1.4, $this->stair_material, 'fan54');
-      $this->price_base_step($this->step_base_lenght, 140, $this->step_runin_quantity * 1.6, $this->stair_material, 'fan54');
+      if($this->stair_material == 'oak50') {
+         $riser_material = 'oak50';
+      }
+      elseif($this->stair_material == 'beech') {
+         $riser_material = 'beech';
+      }
+      else {
+         $riser_material = 'fan54';
+      }
+      $this->price_base_step($this->step_base_lenght, 140, $this->step_base_quantity, $riser_material);
+      $this->price_base_step($this->step_base_lenght, 140, $this->step_frieze_quantity * 1.4, $riser_material);
+      $this->price_base_step($this->step_base_lenght, 140, $this->step_runin_quantity * 1.6, $riser_material);
       $this->consumption['sormat'] += $this->step_base_quantity * 4 + $this->step_frieze_quantity * 6 + $this->step_runin_quantity * 5 + $this->step_halfplatform_quantity * 5 + $this->step_platform_square * 4;
    }
    
@@ -306,6 +318,17 @@ class Stair
       }
    }
    
+   //считаем стоимость лестницы
+   protected function calculate_price()
+   {
+      foreach($this->consumption as $key => $value) {
+         $this->cost_material += $value * self::$arr_prices[$key]['price'];
+         $this->cost_stair += $value * self::$arr_prices[$key]['price'] * self::$arr_prices[$key]['work'] * $this->k_increase_price;
+      }
+      $this->cost_material = round($this->cost_material, 2);
+      $this->cost_stair = round($this->cost_stair, 2);
+   }
+   
    //отдаем во вне требуемые переменные
    static public function get_prices() { return self::$arr_prices; }
    
@@ -335,19 +358,13 @@ class Stair
       elseif($this->stair_material == 'oak50') {
          return 'Дуб ц/м 50мм';
       }
+      elseif($this->stair_material == 'beech') {
+         return 'Бук ц/м 50мм';
+      }
    }
    
    public function get_cost_material() { return $this->cost_material; }
    
    public function get_cost_stair() { return $this->cost_stair; }
    
-   protected function calculate_price()
-   {
-      foreach($this->consumption as $key => $value) {
-         $this->cost_material += $value * self::$arr_prices[$key]['price'];
-         $this->cost_stair += $value * self::$arr_prices[$key]['price'] * self::$arr_prices[$key]['work'] * $this->k_increase_price;
-      }
-      $this->cost_material = round($this->cost_material, 2);
-      $this->cost_stair = round($this->cost_stair, 2);
-   }
 }

@@ -12,11 +12,15 @@ try {
    ChromePhp::groupCollapsed('Таблица цен');
    ChromePhp::table(Stair::get_prices());
    ChromePhp::groupEnd('Таблица цен');
+   //на больцах
    $st_bolz_euro60 = new Stair($form->arr_config, array('stair_type' => 'bolz', 'stair_material' => 'euro60'));
    $st_bolz_fan54 = new Stair($form->arr_config, array('stair_type' => 'bolz', 'stair_material' => 'fan54'));
+   $st_bolz_beech = new Stair($form->arr_config, array('stair_type' => 'bolz', 'stair_material' => 'beech'));
    $st_bolz_oak50 = new Stair($form->arr_config, array('stair_type' => 'bolz', 'stair_material' => 'oak50'));
+   //с подступенками
    $st_riser_euro60 = new Stair($form->arr_config, array('stair_type' => 'riser', 'stair_material' => 'euro60'));
    $st_riser_fan54 = new Stair($form->arr_config, array('stair_type' => 'riser', 'stair_material' => 'fan54'));
+   $st_riser_beech = new Stair($form->arr_config, array('stair_type' => 'riser', 'stair_material' => 'beech'));
    $st_riser_oak50 = new Stair($form->arr_config, array('stair_type' => 'riser', 'stair_material' => 'oak50'));
 } catch(Exception $e) {
    die($e->getMessage());
@@ -320,10 +324,12 @@ try {
        <?php $arr_prices = Stair::get_prices();
        echo(render_prices($st_bolz_euro60->get_stair_type_literary(),$st_bolz_euro60->get_stair_material_literary(), $st_bolz_euro60->get_cost_material(),$st_bolz_euro60->get_cost_stair(), $st_bolz_euro60->get_consumption(), $arr_prices, '1'));
        echo(render_prices($st_bolz_fan54->get_stair_type_literary(),$st_bolz_fan54->get_stair_material_literary(), $st_bolz_fan54->get_cost_material(),$st_bolz_fan54->get_cost_stair(), $st_bolz_fan54->get_consumption(), $arr_prices, '2'));
-       echo(render_prices($st_bolz_oak50->get_stair_type_literary(),$st_bolz_oak50->get_stair_material_literary(), $st_bolz_oak50->get_cost_material(),$st_bolz_oak50->get_cost_stair(), $st_bolz_oak50->get_consumption(), $arr_prices, '3'));
-       echo(render_prices($st_riser_euro60->get_stair_type_literary(),$st_riser_euro60->get_stair_material_literary(), $st_riser_euro60->get_cost_material(),$st_riser_euro60->get_cost_stair(), $st_riser_euro60->get_consumption(), $arr_prices, '4'));
-       echo(render_prices($st_riser_fan54->get_stair_type_literary(),$st_riser_fan54->get_stair_material_literary(), $st_riser_fan54->get_cost_material(),$st_riser_fan54->get_cost_stair(), $st_riser_fan54->get_consumption(), $arr_prices, '5'));
-       echo(render_prices($st_riser_oak50->get_stair_type_literary(),$st_riser_oak50->get_stair_material_literary(), $st_riser_oak50->get_cost_material(),$st_riser_oak50->get_cost_stair(), $st_riser_oak50->get_consumption(), $arr_prices, '6'));
+       echo(render_prices($st_bolz_beech->get_stair_type_literary(),$st_bolz_beech->get_stair_material_literary(), $st_bolz_beech->get_cost_material(),$st_bolz_beech->get_cost_stair(), $st_bolz_beech->get_consumption(), $arr_prices, '3'));
+       echo(render_prices($st_bolz_oak50->get_stair_type_literary(),$st_bolz_oak50->get_stair_material_literary(), $st_bolz_oak50->get_cost_material(),$st_bolz_oak50->get_cost_stair(), $st_bolz_oak50->get_consumption(), $arr_prices, '4'));
+       echo(render_prices($st_riser_euro60->get_stair_type_literary(),$st_riser_euro60->get_stair_material_literary(), $st_riser_euro60->get_cost_material(),$st_riser_euro60->get_cost_stair(), $st_riser_euro60->get_consumption(), $arr_prices, '5'));
+       echo(render_prices($st_riser_fan54->get_stair_type_literary(),$st_riser_fan54->get_stair_material_literary(), $st_riser_fan54->get_cost_material(),$st_riser_fan54->get_cost_stair(), $st_riser_fan54->get_consumption(), $arr_prices, '6'));
+       echo(render_prices($st_riser_beech->get_stair_type_literary(),$st_riser_beech->get_stair_material_literary(), $st_riser_beech->get_cost_material(),$st_riser_beech->get_cost_stair(), $st_riser_beech->get_consumption(), $arr_prices, '7'));
+       echo(render_prices($st_riser_oak50->get_stair_type_literary(),$st_riser_oak50->get_stair_material_literary(), $st_riser_oak50->get_cost_material(),$st_riser_oak50->get_cost_stair(), $st_riser_oak50->get_consumption(), $arr_prices, '8'));
        ?>
 
      
@@ -344,7 +350,7 @@ function render_prices($stair_type_literary,$stair_material_literary, $cost_mate
 $str .= number_format($cost_material, 2, ',', ' ');
 $str .='руб.</p></div></div><div class="col-xs-6 stair_cost text-center panel-heading">';
 $str .=' <div>Стоимость лестницы:<p>'.number_format($cost_stair, 2, ',', ' ');
-   $str .='руб.</p></div></div><div class="col-xs-12" data-toggle="collapse" data-target="#stair'.$ii.'" role="button">Показать подробности</div></div><div class="row collapse" id="stair'.$ii.'"><div class="col-xs-12 ">';
+   $str .='руб.</p></div></div> Стоимость материалов от '.$arr_prices['date']['price'].'<div class="col-xs-12" data-toggle="collapse" data-target="#stair'.$ii.'" role="button">Показать подробности</div></div><div class="row collapse" id="stair'.$ii.'"><div class="col-xs-12 ">';
   
        
        $i = 0;
