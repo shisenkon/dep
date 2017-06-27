@@ -1,0 +1,100 @@
+@deplit_modern_bgcolor_15: #106161;
+@deplit_modern_bgcolor_20: #119966;
+@deplit_modern_bgcolor_25: #f96f99;
+
+@deplit_bgimg_darkwalnut_path: "../img/bg_dw/";
+
+* { -webkit-print-color-adjust: exact; }
+
+@font-face {
+    font-family: Evolventa; /* Гарнитура шрифта */
+    src: url("css/10360.ttf"); /* Путь к файлу со шрифтом */
+   }
+
+.square_color(){
+width: 10px;
+height: 10px;}
+
+body
+{width:95%;
+margin:auto; font-family: Evolventa;}
+p {
+    text-indent: 20px; /* Отступ первой строки в пикселах */
+   text-align:justify;}
+.t_artikul{
+	font-size:10px;
+}
+
+.t_artikul>div{
+	display: flex;
+}
+
+
+.sub_title h1{
+	margin:50px 0 20px 0 ;
+}
+.table h5{
+	font-size: 20px;
+	margin: 0 10px 20px 0;
+}
+.sub_title p{
+	    margin: 20px 0 10px;
+}
+.title h3{
+	color:#00cc00;
+}
+
+//квадраты для примера цвета
+.square_natural {.square_color;background: #cdc593;}
+.square_venge {.square_color;background: #281f16;}
+.square_walnut {.square_color;background: #7b530b;}
+.square_cherry {.square_color;background: #e46c0a;}
+.square_oak {.square_color;background: #d9d9d9;}
+
+//bootstrap redesign
+.table>thead>tr>th {
+background:#00cc00;
+vertical-align: middle;
+text-align:center;
+font-size:10px;
+	font-family: Arial, Helvetica, sans-serif;
+text-transform: uppercase;
+
+}
+.table>tbody>tr>th{
+	font-size: 25px;
+}
+.table .price{
+	font-size: 23px;
+	text-align:center;
+	min-width: 100px;
+}
+.table > tbody > tr > td  {
+     vertical-align: middle;
+     font-family: Evolventa;
+}
+.table > tbody > tr > td.t_description{
+	font-size:10px;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+.table > tbody > tr > td.footer{
+	font-size:25px;
+}
+.table > tbody > tr > td.footer > div{
+	float: left;
+}
+.table > tbody > tr > td.footer .pers{
+	margin: 20px 0;
+}
+.table > tbody > tr > td.footer .name{
+	margin: 30px 0 0 0;
+	font-size:30px;
+}
+.table > tbody > tr > td.footer .tel{
+	font-size:30px;
+}
+.table > tbody > tr > td.footer .email{
+	font-size:20px;
+	color:#00cc00;
+}

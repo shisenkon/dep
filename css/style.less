@@ -1,0 +1,196 @@
+@deplit_modern_bgcolor_15: #106161;
+@deplit_modern_bgcolor_20: #119966;
+@deplit_modern_bgcolor_25: #f96f99;
+
+@deplit_bgimg_darkwalnut_path: "../img/bg_lofline_white/";
+body
+{width:90%;
+margin:auto;}
+.deplit_row div, .deplit_row  {
+	margin:0;
+	padding:0;
+	position:relative;
+	font-size:1px;}
+
+	.deplit_row{
+	display: flex;
+	}
+
+	.deplit_row  div{
+		display: inline-flex;
+	}
+
+.deplit_block {
+	overflow: hidden;
+	display: none;
+}
+.plitka-count {
+	width:800px;
+	margin:5px auto 5px auto;
+}
+
+
+.deplit_show_lenght {
+	position:absolute;
+	width:100%;
+	text-align:center;
+	font-size:30px;
+}
+
+.plitka-count div{
+	font-size:16px;
+}
+
+.deplit_surface {
+	background-color: black
+}
+
+//задаются ширина плитки
+.plitka_modern_height_40(){height:40px;}
+.plitka_modern_height_60(){height:60px;}
+.plitka_modern_height_100(){height:100px;}
+
+//задаются длина плитки
+.plitka_modern_lenght_150(){width:150px;}
+.plitka_modern_lenght_200(){width:200px;}
+.plitka_modern_lenght_250(){width:250px;}
+.plitka_modern_lenght_300(){width:300px;}
+.plitka_modern_lenght_350(){width:350px;}
+
+.plitka_background_image(){background-size: cover;background-position-x: 0px;}
+//Стиль по толщине плитки
+.plitka_modern_thickness_15(){
+	.plitka_background_image;
+	background-color:@deplit_modern_bgcolor_15;
+	box-shadow:inset  1px 0 2px 2px rgba(0,0,0,0.2);
+	z-index:98;}
+.plitka_modern_thickness_20(){
+	.plitka_background_image;
+	background-color:@deplit_modern_bgcolor_20;
+	box-shadow: -1px 1px 1px 0px rgba(0,0,0,0.4), inset  0 0 1px 1px rgba(0,0,0,0.2);
+	z-index:99;}
+.plitka_modern_thickness_25(){
+	.plitka_background_image;
+	background-color:@deplit_modern_bgcolor_25;
+	box-shadow: -2px 1px 1px 0px rgba(0,0,0,0.4);
+	z-index:100;}
+
+
+//Стили плитки MODERN начало
+.pl40-150-15 {
+	.plitka_modern_height_40;
+	.plitka_modern_lenght_150;
+	.plitka_modern_thickness_15;
+	background-image:url('@{deplit_bgimg_darkwalnut_path}3.jpg');
+}
+
+.pl40-250-20 {
+	.plitka_modern_height_40;
+	.plitka_modern_lenght_250;
+	.plitka_modern_thickness_20;
+	background-image: url('@{deplit_bgimg_darkwalnut_path}6.jpg');
+}
+
+.pl40-350-25 {
+	.plitka_modern_height_40;
+	.plitka_modern_lenght_350;
+	.plitka_modern_thickness_25;
+	background-image:url('@{deplit_bgimg_darkwalnut_path}1.jpg');
+}
+
+.pl60-200-15 {
+	.plitka_modern_height_60;
+	.plitka_modern_lenght_200;
+	.plitka_modern_thickness_15;
+	background-image:url('@{deplit_bgimg_darkwalnut_path}6.jpg');
+
+}
+
+.pl60-300-20 {
+	.plitka_modern_height_60;
+	.plitka_modern_lenght_300;
+	.plitka_modern_thickness_20;
+	background-image:url('@{deplit_bgimg_darkwalnut_path}5.jpg');
+}
+
+.pl60-350-25 {
+	.plitka_modern_height_60;
+	.plitka_modern_lenght_350;
+	.plitka_modern_thickness_25;
+	background-image:url('@{deplit_bgimg_darkwalnut_path}4.jpg');
+}
+
+.pl100-200-15 {
+	.plitka_modern_height_100;
+	.plitka_modern_lenght_200;
+	.plitka_modern_thickness_15;
+	background-image:url('@{deplit_bgimg_darkwalnut_path}7.jpg');
+}
+
+.pl100-300-20 {
+	.plitka_modern_height_100;
+	.plitka_modern_lenght_300;
+	.plitka_modern_thickness_20;
+	background-image:url('@{deplit_bgimg_darkwalnut_path}4.jpg');
+}
+
+.pl100-350-25 {
+	.plitka_modern_height_100;
+	.plitka_modern_lenght_350;
+	.plitka_modern_thickness_25;
+	background-image:url('@{deplit_bgimg_darkwalnut_path}9.jpg');
+
+}
+.pl40-150-15, .pl40-250-20, .pl40-350-25, .pl60-200-15, .pl60-300-20, .pl60-350-25, .pl100-200-15, .pl100-300-20, .pl100-350-25 {
+	position: relative;
+
+	//	background-position: center, center;
+}
+
+//Стили плитки MODERN конец
+
+//Стили плитки LOFT начало
+.pl100-100-15 {
+	height: 100px;
+	width: 100px;
+	display: inline-block;
+	position: relative;
+	.plitka_modern_thickness_15;
+	background-image: url('@{deplit_bgimg_darkwalnut_path}1.jpg');
+	box-shadow: inset 0 0 3px 3px rgba(0,0,0,.3);
+}
+
+.pl100-100-20 {
+	.pl100-100-15;
+	.plitka_modern_thickness_20;
+	background-image: url('@{deplit_bgimg_darkwalnut_path}6.jpg');
+	box-shadow: -2px 1px 3px 0 rgba(0,0,0,.4), inset 0px 0px 0px 2px rgba(0,0,0,.4);
+}
+
+.pl100-100-25 {
+	.pl100-100-15;
+	.plitka_modern_thickness_25;
+	background-image: url('@{deplit_bgimg_darkwalnut_path}9.jpg');
+	box-shadow:-4px 0px 1px 0 rgba(0,0,0,.4);
+}
+
+.save_list {
+	background-color: #f0f0f0;
+	padding: 15px;
+	border-radius: 4px;
+}
+
+.input_list {
+	background-color: #f0f0f0;
+	margin-top: 70px;
+	padding: 15px;
+	border-radius: 4px;
+}
+
+.save_list .render_cookie > div{
+	background-color: #e0e0e0;
+	margin-top: 15px;
+	border-radius: 4px;
+	padding:5px;
+}
+

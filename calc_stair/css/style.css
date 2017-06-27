@@ -1,0 +1,18 @@
+body {
+  width: 95%;
+  margin: auto;
+}
+.stair_cost {
+  font-size: 1.5em;
+}
+.stair_cost p {
+  font-weight: bold;
+}
+h3 {
+  font-weight: bold;
+  font-size: 1.7em;
+}
+.stair_panel {
+  background-color: #d9edf7;
+  margin: 0px 0 10px 0;
+}
