@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @package          GRAO Stair Calc
  * @version          0.25
@@ -9,7 +8,6 @@
  * @license          GNU General Public License version 2 or later;
  * Функции: Считает стоимость: фанера54, Евростандарт 60, Дуб.
  */
-
 // TODO считать Фанера36 на обшивку, Бук, Компримат 1п, Компримат 3п
 // TODO сравнение цен из двух файлов CSV1
 class Stair
@@ -39,8 +37,8 @@ class Stair
    protected $step_all_quantity; //сумма всех ступеней и площадок
    protected $hole_all;
    protected $k_increase_price = 1;
-   protected $k_lenght         = 950; // длина после которого начинается удорожания по длине
-   protected $k_width          = 330; // длина после которого начинается удорожания по ширине
+   const K_LENGHT = 950; // длина после которого начинается удорожания по длине
+   const K_WIDTH  = 330; // длина после которого начинается удорожания по ширине
    
    protected $cost_material = 0;
    protected $cost_stair    = 0;
@@ -100,13 +98,12 @@ class Stair
       $this->step_all_quantity = $this->step_base_quantity + $this->step_frieze_quantity + $this->step_runin_quantity + $this->step_halfplatform_quantity;
       $this->k_increase_price();
       //расчет прямых ступеней
-      $this->price_base_step($this->step_base_lenght, $this->step_base_width, $this->step_base_quantity);
+      $this->price_base_step($this->step_base_lenght, $this->step_base_width, $this->step_base_quantity, $this->stair_material);
       //расчет фризовых ступеней
       $this->price_frieze_step();
       //расчет забежных ступеней
-      $this->price_base_step($this->step_base_lenght, $this->step_base_lenght, $this->step_runin_quantity * 1.6);
-      //расчет полуплоащадок
-      $this->price_base_step($this->step_base_lenght, $this->step_base_lenght, $this->step_halfplatform_quantity / 1.8);
+      $this->price_base_step($this->step_base_lenght, $this->step_base_lenght, $this->step_runin_quantity * 1.6, $this->stair_material); //расчет полуплоащадок
+      $this->price_base_step($this->step_base_lenght, $this->step_base_lenght, $this->step_halfplatform_quantity / 1.8, $this->stair_material);
       //расчет подступенков если лестница с подступенками
       if($this->stair_type == 'riser') {
          $this->count_risers_sormats();
@@ -142,20 +139,20 @@ class Stair
 //коэфициент удорожания по длине и ширне базовой ступени
    protected function k_increase_price()
    {
-      if($this->step_base_lenght > $this->k_lenght) {
-         $this->k_increase_price = $this->step_base_lenght / $this->k_lenght;
+      if($this->step_base_lenght > self::K_LENGHT) {
+         $this->k_increase_price = $this->step_base_lenght / self::K_LENGHT;
       }
-      if($this->step_base_width > $this->k_width) {
-         $this->k_increase_price = $this->k_increase_price * ($this->step_base_width / $this->k_width);
+      if($this->step_base_width > self::K_WIDTH) {
+         $this->k_increase_price = $this->k_increase_price * ($this->step_base_width / self::K_WIDTH);
       }
       $this->k_increase_price = $this->k_increase_price / (sqrt($this->k_increase_price));
    }
    
-   protected function price_base_step($step_lenght, $step_width, $step_count)
+   protected function price_base_step($step_lenght, $step_width, $step_count, $step_material)
    {
       //считаем стоимость базовых ступеней из Евростндарта
       //Количество фанеры на одну ступень
-      if($this->stair_material == 'euro60') {
+      if($step_material == 'euro60') {
          //Количество фанеры6 на одну ступень
          $this->consumption['plywood6'] += (2 * 1 / (1520 / ($step_width + 40))) * $step_count;
          //Количество дсп на одну ступень
@@ -170,7 +167,7 @@ class Stair
          $this->consumption['veneer'] += ($step_lenght + $step_width) * 60 * 2 * 2 * 0.000001 * $step_count;
          $this->consumption['pva_vintek'] += ($step_lenght * $step_width) * 4 * 0.5 * 0.000001 * $step_count;
       }
-      elseif($this->stair_material == 'fan54') {
+      elseif($step_material == 'fan54') {
          $this->consumption['plywood18'] += (1 / (1520 / ($step_width + 40))) * $step_count;
          $part_of_list_dsp16_horiz_n = floor(1500 / ($step_lenght + 20));//количество рядов заготовок по длине листа
          $part_of_list_dsp16_horiz = ($part_of_list_dsp16_horiz_n) * floor(1520 / ($step_width + 10)); //количество заготовок по длине листа
@@ -183,7 +180,7 @@ class Stair
          $this->consumption['veneer'] += ($step_lenght + $step_width) * 54 * 2 * 2 * 0.000001 * $step_count;
          $this->consumption['pva_vintek'] += ($step_lenght * $step_width) * 3 * 0.5 * 0.000001 * $step_count;
       }
-      elseif($this->stair_material == 'oak50') {
+      elseif($step_material == 'oak50') {
          $this->consumption['oak50'] += ($step_lenght * $step_width) * 0.07 * 1.25 * 0.000001 * $step_count;
          $this->consumption['veneer'] += ($step_lenght + $step_width) * 54 * 2 * 2 * 0.000001 * $step_count;
          $this->consumption['pva_kleuberit'] += ($step_lenght * $step_width) * 3 * 0.5 * 0.000001 * $step_count;
@@ -211,7 +208,7 @@ class Stair
                $k_add = 1.1;
          }
 //ChromePhp::log("Кол-во фризовых ".$i." k_add:".$k_add);
-         $this->price_base_step($this->step_base_lenght * $k_add, $this->step_base_width * $k_add, 1);
+         $this->price_base_step($this->step_base_lenght * $k_add, $this->step_base_width * $k_add, 1, $this->stair_material);
       }
    }
    
@@ -226,13 +223,9 @@ class Stair
    protected function count_risers_sormats()
    {
       $temp_material = $this->stair_material;
-      if($temp_material == "euro60") {
-         $this->stair_material = 'fan54';
-      }
-      $this->price_base_step($this->step_base_lenght, 140, $this->step_base_quantity);
-      $this->price_base_step($this->step_base_lenght, 140, $this->step_frieze_quantity * 1.4);
-      $this->price_base_step($this->step_base_lenght, 140, $this->step_runin_quantity * 1.6);
-      $this->stair_material = $temp_material;
+      $this->price_base_step($this->step_base_lenght, 140, $this->step_base_quantity, $this->stair_material, 'fan54');
+      $this->price_base_step($this->step_base_lenght, 140, $this->step_frieze_quantity * 1.4, $this->stair_material, 'fan54');
+      $this->price_base_step($this->step_base_lenght, 140, $this->step_runin_quantity * 1.6, $this->stair_material, 'fan54');
       $this->consumption['sormat'] += $this->step_base_quantity * 4 + $this->step_frieze_quantity * 6 + $this->step_runin_quantity * 5 + $this->step_halfplatform_quantity * 5 + $this->step_platform_square * 4;
    }
    
@@ -254,10 +247,7 @@ class Stair
    
    protected function count_supportwood()
    {
-      $temp_material = $this->stair_material;
-      $this->stair_material = 'fan54';
-      $this->price_base_step(800, 300, $this->supportwood_quantity);
-      $this->stair_material = $temp_material;
+      $this->price_base_step(800, 300, $this->supportwood_quantity, 'fan54');
    }
    
    protected function count_boots()
