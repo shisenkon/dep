@@ -2,12 +2,16 @@
 
 /**
  * @package          GRAO Stair Calc
- * @version          0.2
+ * @version          0.25
  * @author             Shibkov Konstantin
  * @link             http://grao.biz
  * @copyright          Copyright (c) 2017, Shibkov Konstantin  aka sendel (shibkov.k@gmail.com)
  * @license          GNU General Public License version 2 or later;
+ * Функции: Считает стоимость: фанера54, Евростандарт 60, Дуб.
  */
+
+// TODO считать Фанера36 на обшивку, Бук, Компримат 1п, Компримат 3п
+// TODO сравнение цен из двух файлов CSV1
 class Stair
 {
    
