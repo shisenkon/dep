@@ -40,8 +40,8 @@ class Stair
    const K_LENGHT = 950; // длина после которого начинается удорожания по длине
    const K_WIDTH  = 330; // длина после которого начинается удорожания по ширине
    
-   protected $cost_material = 0;
-   protected $cost_stair    = 0;
+   protected $cost_material = array();
+   protected $cost_stair    = array();
    //расходы материалов
    protected $consumption = array();
    
@@ -128,7 +128,7 @@ class Stair
          $this->consumption[$i] = round($value, 2);
       }
       $this->calculate_price();
-      ChromePhp::groupCollapsed("$this->stair_type\t$this->stair_material\t$this->step_platform_material\t\tmat:" . number_format($this->cost_material, 2, ',', ' ') . "\tstair:" . number_format($this->cost_stair, 2, ',', ' '));
+      ChromePhp::groupCollapsed("$this->stair_type\t$this->stair_material\t$this->step_platform_material\t\tmat:" . number_format($this->cost_material[self::$arr_prices['date']['price']], 2, ',', ' ') . "\tstair:" . number_format($this->cost_stair[self::$arr_prices['date']['price']], 2, ',', ' '));
       ChromePhp::log("Коэффициент цены: \t\t" . $this->k_increase_price);
       foreach($this->consumption as $key => $value) {
          ChromePhp::log(self::$arr_prices[$key]['descr'] . " \t" . $value . " x " . self::$arr_prices[$key]['price'] . " = " . ($value * self::$arr_prices[$key]['price']));
@@ -319,14 +319,17 @@ class Stair
    }
    
    //считаем стоимость лестницы
-   protected function calculate_price()
+   public function calculate_price()
    {
+     // var_dump(self::$arr_prices['date']['price']);
+      $this->cost_material[self::$arr_prices['date']['price']] = 0;
+      $this->cost_stair[self::$arr_prices['date']['price']] = 0;
       foreach($this->consumption as $key => $value) {
-         $this->cost_material += $value * self::$arr_prices[$key]['price'];
-         $this->cost_stair += $value * self::$arr_prices[$key]['price'] * self::$arr_prices[$key]['work'] * $this->k_increase_price;
+         $this->cost_material[self::$arr_prices['date']['price']] += $value * self::$arr_prices[$key]['price'];
+         $this->cost_stair[self::$arr_prices['date']['price']] += $value * self::$arr_prices[$key]['price'] * self::$arr_prices[$key]['work'] * $this->k_increase_price;
       }
-      $this->cost_material = round($this->cost_material, 2);
-      $this->cost_stair = round($this->cost_stair, 2);
+      $this->cost_material[self::$arr_prices['date']['price']] = round($this->cost_material[self::$arr_prices['date']['price']], 2);
+      $this->cost_stair[self::$arr_prices['date']['price']] = round($this->cost_stair[self::$arr_prices['date']['price']], 2);
    }
    
    //отдаем во вне требуемые переменные
@@ -334,7 +337,7 @@ class Stair
    
    public function get_consumption() { return $this->consumption; }
    
-   public function get_stair_material() { return $this->stair_material; }
+   public function get_stair_material() { return $this->cost_material[self::$arr_prices['date']['price']]; }
    
    public function get_stair_type() { return $this->stair_type; }
    

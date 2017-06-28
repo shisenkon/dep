@@ -13,15 +13,15 @@ try {
    ChromePhp::table(Stair::get_prices());
    ChromePhp::groupEnd('Таблица цен');
    //на больцах
-   $st_bolz_euro60 = new Stair($form->arr_config, array('stair_type' => 'bolz', 'stair_material' => 'euro60'));
-   $st_bolz_fan54 = new Stair($form->arr_config, array('stair_type' => 'bolz', 'stair_material' => 'fan54'));
-   $st_bolz_beech = new Stair($form->arr_config, array('stair_type' => 'bolz', 'stair_material' => 'beech'));
-   $st_bolz_oak50 = new Stair($form->arr_config, array('stair_type' => 'bolz', 'stair_material' => 'oak50'));
+   $array_class_stairs[] = new Stair($form->arr_config, array('stair_type' => 'bolz', 'stair_material' => 'euro60'));
+   $array_class_stairs[] = new Stair($form->arr_config, array('stair_type' => 'bolz', 'stair_material' => 'fan54'));
+   $array_class_stairs[] = new Stair($form->arr_config, array('stair_type' => 'bolz', 'stair_material' => 'beech'));
+   $array_class_stairs[] = new Stair($form->arr_config, array('stair_type' => 'bolz', 'stair_material' => 'oak50'));
    //с подступенками
-   $st_riser_euro60 = new Stair($form->arr_config, array('stair_type' => 'riser', 'stair_material' => 'euro60'));
-   $st_riser_fan54 = new Stair($form->arr_config, array('stair_type' => 'riser', 'stair_material' => 'fan54'));
-   $st_riser_beech = new Stair($form->arr_config, array('stair_type' => 'riser', 'stair_material' => 'beech'));
-   $st_riser_oak50 = new Stair($form->arr_config, array('stair_type' => 'riser', 'stair_material' => 'oak50'));
+   $array_class_stairs[] = new Stair($form->arr_config, array('stair_type' => 'riser', 'stair_material' => 'euro60'));
+   $array_class_stairs[] = new Stair($form->arr_config, array('stair_type' => 'riser', 'stair_material' => 'fan54'));
+   $array_class_stairs[] = new Stair($form->arr_config, array('stair_type' => 'riser', 'stair_material' => 'beech'));
+   $array_class_stairs[] = new Stair($form->arr_config, array('stair_type' => 'riser', 'stair_material' => 'oak50'));
 } catch(Exception $e) {
    die($e->getMessage());
 }
@@ -319,55 +319,58 @@ try {
 
         </form>
     </div>
-   
+
     <div class="col-xs-4 col-md-6">
-       <?php $arr_prices = Stair::get_prices();
-       echo(render_prices($st_bolz_euro60->get_stair_type_literary(),$st_bolz_euro60->get_stair_material_literary(), $st_bolz_euro60->get_cost_material(),$st_bolz_euro60->get_cost_stair(), $st_bolz_euro60->get_consumption(), $arr_prices, '1'));
-       echo(render_prices($st_bolz_fan54->get_stair_type_literary(),$st_bolz_fan54->get_stair_material_literary(), $st_bolz_fan54->get_cost_material(),$st_bolz_fan54->get_cost_stair(), $st_bolz_fan54->get_consumption(), $arr_prices, '2'));
-       echo(render_prices($st_bolz_beech->get_stair_type_literary(),$st_bolz_beech->get_stair_material_literary(), $st_bolz_beech->get_cost_material(),$st_bolz_beech->get_cost_stair(), $st_bolz_beech->get_consumption(), $arr_prices, '3'));
-       echo(render_prices($st_bolz_oak50->get_stair_type_literary(),$st_bolz_oak50->get_stair_material_literary(), $st_bolz_oak50->get_cost_material(),$st_bolz_oak50->get_cost_stair(), $st_bolz_oak50->get_consumption(), $arr_prices, '4'));
-       echo(render_prices($st_riser_euro60->get_stair_type_literary(),$st_riser_euro60->get_stair_material_literary(), $st_riser_euro60->get_cost_material(),$st_riser_euro60->get_cost_stair(), $st_riser_euro60->get_consumption(), $arr_prices, '5'));
-       echo(render_prices($st_riser_fan54->get_stair_type_literary(),$st_riser_fan54->get_stair_material_literary(), $st_riser_fan54->get_cost_material(),$st_riser_fan54->get_cost_stair(), $st_riser_fan54->get_consumption(), $arr_prices, '6'));
-       echo(render_prices($st_riser_beech->get_stair_type_literary(),$st_riser_beech->get_stair_material_literary(), $st_riser_beech->get_cost_material(),$st_riser_beech->get_cost_stair(), $st_riser_beech->get_consumption(), $arr_prices, '7'));
-       echo(render_prices($st_riser_oak50->get_stair_type_literary(),$st_riser_oak50->get_stair_material_literary(), $st_riser_oak50->get_cost_material(),$st_riser_oak50->get_cost_stair(), $st_riser_oak50->get_consumption(), $arr_prices, '8'));
+       <?php
+       $arr_prices[] = Stair::get_prices();
+       Stair::read_prices("csv/price2305.csv");
+       $arr_prices[] = Stair::get_prices();
+       $i = 0;
+       foreach($array_class_stairs as $object) {
+          $i++;
+          $object->calculate_price();
+          echo(render_prices($object->get_stair_type_literary(), $object->get_stair_material_literary(), $object->get_cost_material(), $object->get_cost_stair(), $object->get_consumption(), $arr_prices, $i));
+       }
        ?>
 
-     
-        
-        
-        
-        
+
     </div>
 </div>
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script src="js/bootstrap.min.js"></script>
 
 <?php
-function render_prices($stair_type_literary,$stair_material_literary, $cost_material, $cost_stair, $materials, $arr_prices, $ii)
+function render_prices($stair_type_literary, $stair_material_literary, $cost_material, $cost_stair, $materials, $arr_prices, $ii)
 {
-    
-    $str ='<div class="row stair_panel"><div class="col-xs-12"><h3>Лестница '.$stair_type_literary.' (' . $stair_material_literary . ') без ограждений</h3></div><div class="col-xs-6 stair_cost text-center panel-heading"><div>Стоимость материалов:<p>';
-$str .= number_format($cost_material, 2, ',', ' ');
-$str .='руб.</p></div></div><div class="col-xs-6 stair_cost text-center panel-heading">';
-$str .=' <div>Стоимость лестницы:<p>'.number_format($cost_stair, 2, ',', ' ');
-   $str .='руб.</p></div></div> Стоимость материалов от '.$arr_prices['date']['price'].'<div class="col-xs-12" data-toggle="collapse" data-target="#stair'.$ii.'" role="button">Показать подробности</div></div><div class="row collapse" id="stair'.$ii.'"><div class="col-xs-12 ">';
-  
-       
-       $i = 0;
-       foreach($materials as $key => $value) {
-          if($value != 0) {
-             $i++;
-             $str .='<div class="row"><div class="col-xs-1">' . $i . '</div><div class="col-xs-5">' . $arr_prices[$key]['descr'] . '</div><div class="col-xs-2">' . $value . '</div><div class="col-xs-2">' . $arr_prices[$key]['price'] . ' руб.</div><div class="col-xs-2">' . $value * $arr_prices[$key]['price'] . ' руб.</div></div>';
-          }
-       }
-       $str.='</div></div>';
-return $str;};
+   
+   $str = '<div class="row stair_panel"><div class="col-xs-12"><h3>Лестница ' . $stair_type_literary . ' (' . $stair_material_literary . ') без ограждений</h3></div><div class="col-xs-6 stair_cost text-center panel-heading">';
+   foreach($arr_prices as $key => $value) {
+      $str .= '<div>Стоимость материалов:<p>' . number_format($cost_material[$value['date']['price']], 2, ',', ' ') . 'руб.</p></div>';
+   }
+   $str .= '</div><div class="col-xs-6 stair_cost text-center panel-heading">';
+   
+   //переменные для сравнения цены
+   $prices_diff = array();
+   foreach($arr_prices as $key => $value) {
+      $str .= '<div>Стоимость лестницы:<p>' . number_format($cost_stair[$value['date']['price']], 2, ',', ' ') . 'руб.</p></div>';
+      $prices_diff[]=$cost_stair[$value['date']['price']];
+   }
+   $price_diff = round(($prices_diff[0]/$prices_diff[1])*100, 2);
+   $str .= '<div>'. ($price_diff-100) . '%</div>';
+   
+   $str .= '</div> Стоимость материалов от ' . $arr_prices[0]['date']['price'] . '<div class="col-xs-12" data-toggle="collapse" data-target="#stair' . $ii . '" role="button">Показать подробности</div></div><div class="row collapse" id="stair' . $ii . '"><div class="col-xs-12 ">';
+   $i = 0;
+   foreach($materials as $key => $value) {
+      if($value != 0) {
+         $i++;
+         $str .= '<div class="row"><div class="col-xs-1">' . $i . '</div><div class="col-xs-5">' . $arr_prices[0][$key]['descr'] . '</div><div class="col-xs-2">' . $value . '</div><div class="col-xs-2">' . $arr_prices[0][$key]['price'] . ' руб.</div><div class="col-xs-2">' . $value * $arr_prices[0][$key]['price'] . ' руб.</div></div>';
+      }
+   }
+   $str .= '</div></div>';
+   return $str;
+}
 
-
-
-
-
-
+;
 $time = microtime(true) - $start;
 printf('Скрипт выполнялся %.4F сек.', $time);
 ?>
