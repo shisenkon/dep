@@ -322,14 +322,30 @@ try {
 
     <div class="col-xs-4 col-md-6">
        <?php
-       $arr_prices[] = Stair::get_prices();
+       $arr_prices[] = Stair::get_prices(); //записываем актуальные цены материалов
        Stair::read_prices("csv/price2305.csv");
-       $arr_prices[] = Stair::get_prices();
+       $arr_prices[] = Stair::get_prices(); // записываем базовые цены материалов
        $i = 0;
        foreach($array_class_stairs as $object) {
           $i++;
           $object->calculate_price();
-          echo(render_prices($object->get_stair_type_literary(), $object->get_stair_material_literary(), $object->get_cost_material(), $object->get_cost_stair(), $object->get_consumption(), $arr_prices, $i));
+          $render_strings = render_prices($object->get_stair_type_literary(), $object->get_stair_material_literary(), $object->get_cost_material(), $object->get_cost_stair(), $object->get_consumption(), $arr_prices);
+          echo '<div class="row stair_panel"><div class="col-xs-12"><h3>' . $render_strings['title'] . '</h3></div>';
+          echo '<div class="col-xs-6 stair_cost text-center panel-heading">';
+          foreach($render_strings['material_price'] as $key => $value) {
+             echo '<div>Стоимость материалов (' . $key . '):<p>' . $value . 'руб.</p></div>';
+          }
+          echo '</div><div class="col-xs-6 stair_cost text-center panel-heading">';
+          foreach($render_strings['stair_price'] as $key => $value) {
+             echo '<div>Стоимость лестницы (' . $key . '):<p>' . $value . 'руб.</p></div>';
+             echo '<div data-toggle="tooltip" data-placement="top" title="Подсказка">' . $render_strings['diff'] . '% от базовой стоимости</div>';
+             break;
+          }
+          
+          echo '</div>';
+          echo '<div class="col-xs-12" data-toggle="collapse" data-target="#stair' . $i . '" role="button">Показать подробности</div><div class="col-xs-12 collapse" id="stair' . $i . '">';
+          echo $render_strings['material_list'];
+          echo '</div></div>';
        }
        ?>
 
@@ -340,33 +356,32 @@ try {
 <script src="js/bootstrap.min.js"></script>
 
 <?php
-function render_prices($stair_type_literary, $stair_material_literary, $cost_material, $cost_stair, $materials, $arr_prices, $ii)
+function render_prices($stair_type_literary, $stair_material_literary, $cost_material, $cost_stair, $materials, $arr_prices)
 {
-   
-   $str = '<div class="row stair_panel"><div class="col-xs-12"><h3>Лестница ' . $stair_type_literary . ' (' . $stair_material_literary . ') без ограждений</h3></div><div class="col-xs-6 stair_cost text-center panel-heading">';
+   $str = array(); //массиы с выводом даных
+   $str['title'] = 'Лестница ' . $stair_type_literary . ' (' . $stair_material_literary . ') без ограждений';
+   //вывод стоимости материалов
+   $ii = 0;
    foreach($arr_prices as $key => $value) {
-      $str .= '<div>Стоимость материалов:<p>' . number_format($cost_material[$value['date']['price']], 2, ',', ' ') . 'руб.</p></div>';
+      $str['material_price'][$value['date']['price']] = number_format($cost_material[$value['date']['price']], 2, ',', ' ');
    }
-   $str .= '</div><div class="col-xs-6 stair_cost text-center panel-heading">';
-   
    //переменные для сравнения цены
    $prices_diff = array();
+   //вывод стоимости лестницы
    foreach($arr_prices as $key => $value) {
-      $str .= '<div>Стоимость лестницы:<p>' . number_format($cost_stair[$value['date']['price']], 2, ',', ' ') . 'руб.</p></div>';
-      $prices_diff[]=$cost_stair[$value['date']['price']];
+      $str['stair_price'][$value['date']['price']] = number_format($cost_stair[$value['date']['price']], 2, ',', ' ');
+      $prices_diff[] = $cost_stair[$value['date']['price']];
    }
-   $price_diff = round(($prices_diff[0]/$prices_diff[1])*100, 2);
-   $str .= '<div>'. ($price_diff-100) . '%</div>';
-   
-   $str .= '</div> Стоимость материалов от ' . $arr_prices[0]['date']['price'] . '<div class="col-xs-12" data-toggle="collapse" data-target="#stair' . $ii . '" role="button">Показать подробности</div></div><div class="row collapse" id="stair' . $ii . '"><div class="col-xs-12 ">';
+   $str['diff'] = round(($prices_diff[0] / $prices_diff[1]) * 100, 2) - 100;
+   $str['material_list'] = '<div class="col-xs-12">Стоимость материалов от ' . $arr_prices[0]['date']['price'] . '</div><div class="col-xs-12 ">';
    $i = 0;
    foreach($materials as $key => $value) {
       if($value != 0) {
          $i++;
-         $str .= '<div class="row"><div class="col-xs-1">' . $i . '</div><div class="col-xs-5">' . $arr_prices[0][$key]['descr'] . '</div><div class="col-xs-2">' . $value . '</div><div class="col-xs-2">' . $arr_prices[0][$key]['price'] . ' руб.</div><div class="col-xs-2">' . $value * $arr_prices[0][$key]['price'] . ' руб.</div></div>';
+         $str['material_list'] .= '<div class="row"><div class="col-xs-1">' . $i . '</div><div class="col-xs-5">' . $arr_prices[0][$key]['descr'] . '</div><div class="col-xs-2">' . $value . '</div><div class="col-xs-2">' . $arr_prices[0][$key]['price'] . ' руб.</div><div class="col-xs-2">' . $value * $arr_prices[0][$key]['price'] . ' руб.</div></div>';
       }
-   }
-   $str .= '</div></div>';
+      
+   }$str['material_list'] .='</div>';
    return $str;
 }
 
@@ -376,6 +391,7 @@ printf('Скрипт выполнялся %.4F сек.', $time);
 ?>
 </div>
 </div>
+
 </body>
 </html>
 
