@@ -1,6 +1,8 @@
 <?php
 // include lib file
 //include('deplit.inc.php');
+ini_set('display_errors',1);
+ini_set('error_reporting',2047);
 $start = microtime(true);
 include('grao.form.php');
 include('grao_calc_stair.inc.php');
